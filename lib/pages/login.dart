@@ -2,12 +2,12 @@
 
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class Login extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<Login> {
   // const HomePage({super.key});
   final Color borderColor = Color(0xFF199A8E);
   final Color greyColor = Color(0xFFA1A8B0);

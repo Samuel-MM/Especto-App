@@ -1,14 +1,24 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
+class Register extends StatefulWidget {
+  const Register({super.key});
+  @override
+  RegisterState createState() => RegisterState();
+}
+
+class RegisterState extends State<Register> {
+  // Register({super.key});
   final Color borderColor = Color(0xFF199A8E);
   final Color greyColor = Color(0xFFA1A8B0);
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passWordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool isValidEmail = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,132 +44,157 @@ class RegisterPage extends StatelessWidget {
             },
           ),
         ),
-        body: Center(
-          child: Container(
-            constraints: BoxConstraints(maxWidth: 300),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  child: Center(
-                    child: Image.asset(
-                      'health.png',
-                      width: 100,
-                      height: 100,
+        body: Form(
+          key: _formKey,
+          child: Center(
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 300),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40.0),
+                    child: Center(
+                      child: Image.asset(
+                        'health.png',
+                        width: 100,
+                        height: 100,
+                      ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      labelText: 'Entre com seu nome',
-                      labelStyle: TextStyle(
-                        color: greyColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(
-                          color: borderColor,
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: nameController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor entre com seu nome';
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Entre com seu nome',
+                        labelStyle: TextStyle(
+                          color: greyColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                            color: borderColor,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: greyColor,
                         ),
                       ),
-                      prefixIcon: Icon(
-                        Icons.person,
-                        color: greyColor,
-                      ),
+                      cursorColor: greyColor,
+                      keyboardType: TextInputType.text,
                     ),
-                    cursorColor: greyColor,
-                    keyboardType: TextInputType.text,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Entre com seu email',
-                      labelStyle: TextStyle(
-                        color: greyColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(
-                          color: borderColor,
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: emailController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty || !isValidEmail) {
+                          return 'Por favor entre com seu email';
+                        }
+                      },
+                      onChanged: (value) {
+                        setState(() {
+                          isValidEmail = validateEmail(value);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Entre com seu email',
+                        suffixIcon: isValidEmail
+                            ? Icon(Icons.check, color: borderColor)
+                            : null,
+                        labelStyle: TextStyle(
+                          color: greyColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                            color: borderColor,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.email,
+                          color: greyColor,
                         ),
                       ),
-                      prefixIcon: Icon(
-                        Icons.email,
-                        color: greyColor,
-                      ),
+                      cursorColor: greyColor,
+                      keyboardType: TextInputType.text,
                     ),
-                    cursorColor: greyColor,
-                    keyboardType: TextInputType.text,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextField(
-                    controller: passWordController,
-                    decoration: InputDecoration(
-                      labelText: 'Entre com sua senha',
-                      labelStyle: TextStyle(
-                        color: greyColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                        borderSide: BorderSide(
-                          color: borderColor,
+                  Padding(
+                    padding: EdgeInsets.all(10),
+                    child: TextFormField(
+                      controller: passWordController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor entre com sua senha';
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Entre com sua senha',
+                        labelStyle: TextStyle(
+                          color: greyColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                          borderSide: BorderSide(
+                            color: borderColor,
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: greyColor,
                         ),
                       ),
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        color: greyColor,
-                      ),
-                    ),
-                    cursorColor: greyColor,
-                    keyboardType: TextInputType.text,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                  ),
-                ),
-                Container(
-                  width: 280,
-                  margin: EdgeInsets.symmetric(vertical: 10),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(14.0),
-                      child: Text(
-                        'Finalizar Cadastro',
-                        style: TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      backgroundColor: borderColor,
+                      cursorColor: greyColor,
+                      keyboardType: TextInputType.text,
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
                     ),
                   ),
-                ),
-              ],
+                  Container(
+                    width: 280,
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          print('Entrar pressionado');
+                          sendUserData();
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(14.0),
+                        child: Text(
+                          'Finalizar Cadastro',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        backgroundColor: borderColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -167,5 +202,25 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  void login() {}
+  void sendUserData() async {
+    final response = await http.post(
+      Uri.parse('http://localhost/api/test-data'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': 'teste',
+      }),
+    );
+    if (response.statusCode == 201) {
+      print(jsonDecode(response.body));
+    } else {
+      throw Exception('Error');
+    }
+  }
+
+  bool validateEmail(String value) {
+    final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+    return emailRegex.hasMatch(value);
+  }
 }
