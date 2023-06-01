@@ -1,3 +1,4 @@
+import 'package:especto_app/pages/login.dart';
 import 'package:especto_app/pages/register.dart';
 import 'package:flutter/material.dart';
 import 'package:especto_app/controllers/Brightness_Controller.dart';
@@ -7,13 +8,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-	return  AnimatedBuilder(
-	  animation: BrightnessController.getInstance().getTheme(), 
+	return  MaterialApp(
+	  // animation: BrightnessController.getInstance().getTheme(), 
 	  builder: (context, child) {
 		return MaterialApp(
 		  theme: ThemeData(
-			primarySwatch: Colors.purple,
-			brightness: BrightnessController.getInstance().getTheme()
+			// primarySwatch: Colors.purple,
+			// brightness: BrightnessController.getInstance().getTheme()
 		  ),
 		  home: HomePage(),
 		);

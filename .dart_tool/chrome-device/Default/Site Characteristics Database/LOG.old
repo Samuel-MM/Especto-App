@@ -1,0 +1,5 @@
+2023/05/31-16:56:31.465 3d2c Log #3: 1 ops saved to Table #4 OK
+2023/05/31-16:56:31.471 3d2c Archiving C:\Users\samue\AppData\Local\Temp\flutter_tools.e37952fb\flutter_tools_chrome_device.6dd21f9a\Default\Site Characteristics Database/000003.log: OK
+2023/05/31-16:56:31.472 3d2c Table #4: 1 entries OK
+2023/05/31-16:56:31.479 3d2c Archiving C:\Users\samue\AppData\Local\Temp\flutter_tools.e37952fb\flutter_tools_chrome_device.6dd21f9a\Default\Site Characteristics Database/MANIFEST-000001: OK
+2023/05/31-16:56:31.491 3d2c **** Repaired leveldb C:\Users\samue\AppData\Local\Temp\flutter_tools.e37952fb\flutter_tools_chrome_device.6dd21f9a\Default\Site Characteristics Database; recovered 1 files; 130 bytes. Some data may have been lost. ****
