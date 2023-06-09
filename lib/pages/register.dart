@@ -209,10 +209,10 @@ class RegisterState extends State<Register> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        'title': 'teste',
+        'title': 'MIZAEL',
       }),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       print(jsonDecode(response.body));
     } else {
       throw Exception('Error');
